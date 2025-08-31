@@ -24,8 +24,13 @@ section {
     border-radius: 10px;
     padding: 1rem;
     box-shadow: 0 2px 6px hsl(from var(--ctp-crust) h s l / 0.6);
-    position: relative;
     z-index: 4; /* por encima del cable */
+}
+
+.tree {
+    border: 1px var(--ctp-mauve) solid;
+    border-radius: 8px;
+    height: 300px;
 }
 
 /* Sección central */

@@ -10,12 +10,20 @@ import {
   HtmlUtils,
 } from "../dist/lorofs" // Change this for LoroFS
 
+const delayel = document.getElementById("delay") as HTMLInputElement; 
+
 const doc1 = LoroFS.new("Example", () => { }); 
 const export1 = doc1.export({mode: "snapshot"})
 const doc2 = LoroFS.load(export1);
 
 doc1.subscribeToLocalUpdates((update) => {
-  doc2.import(update)
+  const value = parseInt(delayel.value);
+  if (value) {
+    setTimeout(
+      () => doc2.import(update),
+      value
+    )
+  }
 });
 
 const el1 = document.getElementById("explorer1")

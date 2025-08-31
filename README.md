@@ -280,4 +280,4 @@ If no `iconProvider` is specified, `LoroFS` defaults to simple icons from [Lucid
 *   **Persistence Strategy:**
     *   `onSave` callback for the host application to persist the main FS `LoroDoc` and individual file content `LoroDoc` instances.
 
-See the [dev example](./dev/index.ts) for complete implementation details.
+See the [sample](./sample/index.ts) for complete implementation example.
