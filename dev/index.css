@@ -1,0 +1,91 @@
+body {
+    /*display: flex; */
+    /*flex-direction: ; */
+    background-color: var(--ctp-mantle);
+    color: var(--ctp-text);
+    height: 100dvh;
+    overflow: hidden;
+}
+
+main {
+    display: inline-block; 
+    box-sizing: border-box;
+    width: 300px; 
+    margin: 8px; 
+    height: calc(100dvh - calc(8px * 4));
+    border-radius: 4px; 
+    padding: 4px;
+    background-color: var(--ctp-base);
+}
+
+#fth-select { 
+    vertical-align: top;
+    margin-left: 8px;
+    margin-top: 8px; 
+}
+
+.notes {
+    position: fixed; 
+    bottom: 24px; 
+    left: 24px; 
+    background: var(--ctp-crust);
+    padding: 10px; 
+    border-radius: 4px; 
+    font-size: 12px; 
+    max-width: 300px;
+}
+
+.lorofs-item { user-select: none; }
+
+.lorofs-name { vertical-align: middle; }
+
+.lorofs-prop {
+    box-sizing: border-box;
+    padding-left: calc(var(--depth) * 8px);
+    line-height: 1.2lh;
+}
+
+.lorofs-prop:hover {
+    background-color: hsl(from var(--ctp-surface0) h s l / .3);
+    cursor: pointer;
+}
+
+.lorofs-prop:focus {
+    background-color: hsl(from var(--ctp-surface0) h s l / .4);
+    outline: 1px solid var(--ctp-mauve);
+}
+
+
+.lorofs-icon * {
+    padding-inline: 2px;
+    vertical-align: middle;
+}
+
+.lorofs-placeholder {
+    opacity: 0.8;
+}
+
+input.lorofs-name {
+    background: transparent;
+    border: 1px solid var(--ctp-overlay1);
+    border-radius: 2px;
+    padding: 2px 4px;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    min-width: 100px;
+}
+
+input.lorofs-name:focus {
+    border: 1px solid var(--ctp-blue);
+    box-shadow: 0 0 0 1px var(--ctp-blue);
+}
+
+input.lorofs-name.lorofs-error:focus {
+    border: 1px solid var(--ctp-red);
+    box-shadow: 0 0 0 1px var(--ctp-red);
+}
+
+input.lorofs-name::placeholder {
+    color: var(--ctp-subtext0);
+}

@@ -1,0 +1,48 @@
+{
+    "name": "@glifox/lorofs",
+    "version": "0.0.1",
+    "author": "feraxhp",
+    "description": "File-system base on Loro CRDT",
+    "license": "MIT",
+    "type": "module",
+    "main": "dist/lorofs.js",
+    "types": "dist/lorofs.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/glifox/lorofs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/glifox/lorofs/issues"
+    },
+    "homepage": "https://github.com/glifox/lorofs",
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "scripts": {
+        "dev": "cd dev && vite --host",
+        "sample": "vite build && cd sample && vite --host",
+        "build": "vite build",
+        "pub": "vite build && npm publish"
+    },
+    "keywords": [
+        "loro",
+        "collaborative",
+        "file-mannager",
+        "file-system"
+    ],
+    "packageManager": "pnpm@10.12.4",
+    "devDependencies": {
+        "vite": "^7.0.6",
+        "vite-plugin-top-level-await": "^1.6.0",
+        "vite-plugin-wasm": "^3.5.0",
+        "vite-plugin-dts": "^4.5.4"
+    },
+    "dependencies": {
+        "loro-crdt": "^1.5.9",
+        "uuid": "^11.1.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

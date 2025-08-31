@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/glifox/.github/refs/heads/main/logos/logo.svg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/feraxhp/thselector@v0.0.1/latte-mocca.css">
+    <script src="https://cdn.jsdelivr.net/gh/feraxhp/thselector@v0.0.1/load-theme.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/gh/feraxhp/thselector@v0.0.1/select-theme.js" defer></script>
+    <script defer type="module" src="index.ts"></script>
+</head>
+<body>
+<main>
+    <section>
+        <h2 class="title">Explorer 1</h2>
+        <h3 class="subtitle">Full interactive</h3>
+        <div class="tree"><div id="explorer1"></div></div>
+    </section>
+    <section>
+      <select id="fth-select"></select>
+      <div class="conector">
+        <div class="delay-wrapper">
+          <label for="delay">delay:</label> 
+          <input id="delay" name="text" class="input" pattern="\d+" value="100">
+          <label for="delay">ms</label>
+        </div>
+      </div>
+    </section>
+    <section>
+        <h2 class="title">Explorer 2</h2>
+        <h3 class="subtitle">Only open directories</h3>
+        <div class="tree"><div id="explorer2"></div></div>
+    </section>
+</main>
+</body>
+</html>
