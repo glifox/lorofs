@@ -8,7 +8,7 @@ _LoroFS_ also provides an integrated file explorer component to efficiently inte
 ## Installation
 
 ```bash
-npm install @glifox/gnosis
+npm install @glifox/lorofs
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ npm install @glifox/gnosis
 The `LoroFS` class manages the file system's structure and metadata using a `LoroDoc` internally.
 
 ```ts
-import { LoroDoc, LoroFS } from "@glifox/gnosis";
+import { LoroDoc, LoroFS } from "@glifox/lorofs";
 
 // A callback function to handle saving/deleting LoroDoc instances (file contents & main FS doc)
 const mySaveCallback = (key: string, doc: LoroDoc, options?: { delete?: boolean }) => {
@@ -84,9 +84,9 @@ The `Explorer` component allows you to render and interact with the `LoroFS` str
 *   **Event System**: Modular event handling with separate mouse and keyboard event types.
 
 ```ts
-import { Explorer, LoroFS, LoroTreeNode } from "@glifox/gnosis";
-import { defaultListeners } from "@glifox/gnosis/events/listeners";
-import { IconProvider } from "@glifox/gnosis/icons/loader";
+import { Explorer, LoroFS, LoroTreeNode } from "@glifox/lorofs";
+import { defaultListeners } from "@glifox/lorofs/events/listeners";
+import { IconProvider } from "@glifox/lorofs/icons/loader";
 
 const fs = LoroFS.new("Example", /* mySaveCallback defined above */);
 const el = document.getElementById("explorer")!;
@@ -164,10 +164,10 @@ The explorer supports comprehensive keyboard navigation and shortcuts, alongside
 The event system is modular and extensible. You can provide your own listeners or augment the `defaultListeners`:
 
 ```ts
-import { defaultListeners } from "@glifox/gnosis/events/listeners";
-import { click, dragstart, drop } from "@glifox/gnosis/events/types/mouse";
-import { keydown } from "@glifox/gnosis/events/types/keyboard";
-import { defaultMenuItems, ContextMenuOptions } from "@glifox/gnosis/events/types/contextmenu";
+import { defaultListeners } from "@glifox/lorofs/events/listeners";
+import { click, dragstart, drop } from "@glifox/lorofs/events/types/mouse";
+import { keydown } from "@glifox/lorofs/events/types/keyboard";
+import { defaultMenuItems, ContextMenuOptions } from "@glifox/lorofs/events/types/contextmenu";
 
 // Example of custom context menu options
 const customContextMenuOptions: ContextMenuOptions = {
@@ -202,8 +202,8 @@ const explorer = new Explorer(fs, el, {
 The system supports custom icon providers for an enhanced visual experience:
 
 ```ts
-import { IconProvider } from "@glifox/gnosis/icons/loader";
-import { defaultListeners } from "@glifox/gnosis/events/listeners";
+import { IconProvider } from "@glifox/lorofs/icons/loader";
+import { defaultListeners } from "@glifox/lorofs/events/listeners";
 
 // Load your icon theme configuration (e.g., from a JSON file)
 // This structure is inspired by VSCode/Zed icon packs.
