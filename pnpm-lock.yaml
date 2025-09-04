@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@glifox/desmos':
+        specifier: ^0.1.0
+        version: 0.1.0
       loro-crdt:
         specifier: ^1.5.9
         version: 1.5.9
@@ -202,6 +205,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@glifox/desmos@0.1.0':
+    resolution: {integrity: sha512-SikqVnofIU8xdGKf7F2QxxgzR1UDi9dSKTrAirja8HBGSvoyptIx/oMB+dpuG5ehSaiJbjfAcW4gkw/WKVm1wA==}
 
   '@isaacs/balanced-match@4.0.1':
     resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
@@ -915,6 +921,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.8':
     optional: true
+
+  '@glifox/desmos@0.1.0': {}
 
   '@isaacs/balanced-match@4.0.1': {}
 

@@ -3,9 +3,14 @@ import { Explorer } from "../explorer/explorer";
 
 
 export const getTarget = (event: Event): HTMLElement | null => {
-  const target = event.target as HTMLElement ?? document.activeElement as HTMLElement;
+  let target = event.target  as HTMLElement;
+  
+  if (target instanceof HTMLInputElement) target.closest(`.${HtmlUtils.MAINCLASS}`) as HTMLElement;
+  else target = event.target as HTMLElement ?? document.activeElement as HTMLElement;
+  
   return target.closest(`.${HtmlUtils.MAINCLASS}`) as HTMLElement | null;
 }
+
 
 const calcIndexOfFocusedElement = (focusables: NodeListOf<Element>,target: HTMLElement) => {
   if (focusables.length === 0) return;
@@ -17,11 +22,14 @@ const calcIndexOfFocusedElement = (focusables: NodeListOf<Element>,target: HTMLE
   return currentIndex;
 }
 
+
 export const actions = {
   OpenFileOrDirectory: (event: KeyboardEvent, explorer: Explorer, toogleDirectory: boolean = false) => {
+    if (event.target instanceof HTMLInputElement) return;
     const target = getTarget(event);
     if (!target) return;
     
+    event.preventDefault();
     const type = target.dataset.type;
     switch (type) {
       case "file": explorer.openFile(target); break;
@@ -31,6 +39,8 @@ export const actions = {
     }
   },
   CloseSelfOrParentDirectory: (event: KeyboardEvent, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     if (!target) return;
     
@@ -41,18 +51,26 @@ export const actions = {
     (directory.querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();
   },
   NewDirectory: (event: Event, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     explorer.createNewDirectory(target);
   },
   NewFile: (event: Event, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     explorer.createNewFile(target);
   },
   Rename: (event: Event, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     explorer.startRename(target);
   },
   FocusNext: (event: Event, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     const rootId = explorer.fs.getRootNodeId();
     const rootElement = document.getElementById(
@@ -73,6 +91,8 @@ export const actions = {
     (focusables[nextIndex].querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();   
   },
   FocusPrevious: (event: Event, explorer: Explorer) => {
+    if (event.target instanceof HTMLInputElement) return;
+    event.preventDefault();
     const target = getTarget(event);
     const rootId = explorer.fs.getRootNodeId();
     const rootElement = document.getElementById(HtmlUtils.mainID(rootId, explorer.alias))

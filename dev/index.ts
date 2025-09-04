@@ -49,16 +49,6 @@ setTimeout(() => {
 
 // Add keyboard shortcuts for testing file/folder creation
 document.addEventListener('keydown', (e) => {
-  if (e.shiftKey && e.key === 'F') {
-    e.preventDefault();
-    actions.NewFile(e, explorer);
-  }
-  
-  if (e.shiftKey && e.key === 'D') {
-    e.preventDefault();
-    actions.NewDirectory(e, explorer)
-  }
-  
   if (e.key === 'ArrowUp') {
     e.preventDefault();
     actions.FocusPrevious(e, explorer);

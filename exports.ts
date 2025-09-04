@@ -6,14 +6,18 @@ import { defaultListeners } from "./src/events/listeners";
 import { HtmlUtils } from "./src/explorer/utils";
 import { actions, getTarget } from "./src/events/actions";
 import { defaultMenuItems } from "./src/events/types/contextmenu";
+import { KeymapConfig } from "./src/events/keybind";
+import { defaultKeymap } from "./src/events/types/keyboard";
 
 export {
   LoroFS,
   Explorer,
   IconProvider,
   HtmlUtils,
+  KeymapConfig,
   defaultListeners,
   actions,
   defaultMenuItems,
-  getTarget
+  defaultKeymap,
+  getTarget,
 };
