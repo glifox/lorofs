@@ -7,6 +7,7 @@ import { KeymapConfig } from "./keybind";
 interface ListenersOptions {
   contextMenuOptions?: ContextMenuOptions,
   keybindings?: KeymapConfig,
+  listeners?: Listener[]
 }
 
 export const defaultListeners = (options?: ListenersOptions): Listener[] => {
@@ -18,6 +19,7 @@ export const defaultListeners = (options?: ListenersOptions): Listener[] => {
     { name: "dragleave", callback: dragleave },
     { name: "drop", callback: drop },
     { name: "keydown", callback: keydownListener },
-    { name: "contextmenu", callback: (e: Event, explorer: Explorer) => { contextmenu(e, explorer, options?.contextMenuOptions) } }
+    { name: "contextmenu", callback: (e: Event, explorer: Explorer) => { contextmenu(e, explorer, options?.contextMenuOptions) } },
+    ...options?.listeners ?? []
   ]
 };

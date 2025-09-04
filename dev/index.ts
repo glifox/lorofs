@@ -17,6 +17,7 @@ const explorer = new Explorer(doc, el!, {
   iconProvider: IconProvider.new(catppuccinIcons as any, "Catppuccin Mocha"),
   listeners: defaultListeners({ contextMenuOptions: { 
     menuItems: defaultMenuItems(
+      "divider",
        { text: "undo", onclick: undoManager.undo },  
       { text: "redo", onclick: undoManager.redo }
     )

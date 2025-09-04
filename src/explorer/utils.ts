@@ -29,10 +29,15 @@ export const HtmlUtils = {
     return depth;
   },
   
+  MENUID: "lorofs-contextmenu",
+  
   MAINCLASS: "lorofs-item",
   ICONCLASS: "lorofs-icon",
   NAMECLASS: "lorofs-name",
   PROPCLASS: "lorofs-prop",
   WRAPCLASS: "lorofs-wrap",
   ERRORCLASS: "lorofs-error",
+  
+  MENUBUTTONCLASS: "lorofs-menubutton",
+  MENUDIVIDERCLASS: "lorofs-menudivider",
 }

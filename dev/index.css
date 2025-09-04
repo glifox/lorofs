@@ -89,3 +89,26 @@ input.lorofs-name.lorofs-error:focus {
 input.lorofs-name::placeholder {
     color: var(--ctp-subtext0);
 }
+
+#lorofs-contextmenu {
+    min-width: 160px;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: var(--ctp-surface0);
+}
+
+.lorofs-menubutton {
+    background-color: transparent;
+    outline: unset;
+    border: unset;
+    border-radius: 4px;
+    padding: 4px;
+    width: 100%;
+    text-align: start;
+}
+
+.lorofs-menubutton:hover {
+    background-color: hsl(from var(--ctp-subtext0) h s l / .2);
+}
+
+.lorofs-menudivider { color: hsl(from var(--ctp-text) h s l / .4); }
