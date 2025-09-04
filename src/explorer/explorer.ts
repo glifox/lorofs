@@ -2,7 +2,8 @@ import {
   LoroEvent,
   LoroEventBatch,
   LoroTreeNode,
-  Subscription
+  Subscription,
+  TreeID
 } from "loro-crdt";
 import { LoroFS } from "../LoroFS";
 import { Renderer } from "./renderer";
@@ -145,7 +146,7 @@ export class Explorer {
    * The user can type the filename and the icon will update reactively based on the file extension.
    * @param parentElement - Optional parent directory element. If not provided, creates in root directory.
    */
-  public createNewFile(parentElement?: HTMLElement): void {
+  public createNewFile(parentElement?: HTMLElement, onCreate:  (element: HTMLElement) => void = () => {}): void {
     const parentNode = parentElement ? this.#elementToNode(parentElement) : this.fs.getRootNode();
     if (!parentNode || parentNode.data.get("type") !== "directory") return;
     
@@ -156,10 +157,14 @@ export class Explorer {
       "file", 
       parentNode, 
       parentElement, 
-      (name: string, _, parentNode: LoroTreeNode) => {
-          const fileType = this.renderer.getFileTypeFromName(name);
-          this.fs.createFile(name, fileType, parentNode.id);
-    });
+      (name: string, _, parentNode: LoroTreeNode): TreeID => {
+        const fileType = this.renderer.getFileTypeFromName(name);
+        const result = this.fs.createFile(name, fileType, parentNode.id);
+        
+        return result.nodeId;
+      },
+      onCreate
+    );
   }
   
   /**
@@ -167,7 +172,7 @@ export class Explorer {
    * The user can type the directory name and confirm creation.
    * @param parentElement - Optional parent directory element. If not provided, creates in root directory.
    */
-  public createNewDirectory(parentElement?: HTMLElement): void {
+  public createNewDirectory(parentElement?: HTMLElement, onCreate: (element: HTMLElement) => void = () => {}): void {
     const parentNode = parentElement ? this.#elementToNode(parentElement) : this.fs.getRootNode();
     if (!parentNode || parentNode.data.get("type") !== "directory") return;
     
@@ -178,22 +183,28 @@ export class Explorer {
       "directory", 
       parentNode, 
       parentElement, 
-      (name: string, _, parentNode: LoroTreeNode) => {
-        this.fs.createDirectory(name, parentNode.id);
-    });
+      (name: string, _, parentNode: LoroTreeNode): TreeID => {
+        let id = this.fs.createDirectory(name, parentNode.id);
+        return id;
+      },
+      onCreate
+    );
   }
 
   /**
    * Starts the rename process for an element.
    * @param element - The element to rename.
    */
-  public startRename(element: HTMLElement): void {
+  public startRename(element: HTMLElement, onRename: (element: HTMLElement) => void = () => { }): void {
     const node = this.#elementToNode(element);
     if (!node) return;
     
     this.renderer.startRename(
       element, node, 
-      (newName: string, nodeId: any) => this.fs.renameNode(nodeId, newName)
+      (newName: string, nodeId: any) => {
+        this.fs.renameNode(nodeId, newName);
+        onRename(element)
+      }
     );
   }
   

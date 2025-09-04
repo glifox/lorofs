@@ -1,5 +1,6 @@
 import { HtmlUtils } from "../explorer/utils";
 import { Explorer } from "../explorer/explorer";
+import { TreeID } from "loro-crdt";
 
 
 export const getTarget = (event: Event): HTMLElement | null => {
@@ -22,9 +23,14 @@ const calcIndexOfFocusedElement = (focusables: NodeListOf<Element>,target: HTMLE
   return currentIndex;
 }
 
+const getElementById = (id: TreeID, alias: string): HTMLElement => {
+  const id_ = HtmlUtils.mainID(id, alias)
+  return document.getElementById(id_);
+}
 
 export const actions = {
   OpenFileOrDirectory: (event: KeyboardEvent, explorer: Explorer, toogleDirectory: boolean = false) => {
+    if (typeof toogleDirectory !== 'boolean') throw "toggleDirectory must be a boolean";
     if (event.target instanceof HTMLInputElement) return;
     const target = getTarget(event);
     if (!target) return;
@@ -48,25 +54,25 @@ export const actions = {
     if (!directory) return;
     
     explorer.closeDirectory(directory);
-    (directory.querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();
+    HtmlUtils.setFocus(directory);
   },
   NewDirectory: (event: Event, explorer: Explorer) => {
     if (event.target instanceof HTMLInputElement) return;
     event.preventDefault();
     const target = getTarget(event);
-    explorer.createNewDirectory(target);
+    explorer.createNewDirectory(target, HtmlUtils.setFocus);
   },
   NewFile: (event: Event, explorer: Explorer) => {
     if (event.target instanceof HTMLInputElement) return;
     event.preventDefault();
     const target = getTarget(event);
-    explorer.createNewFile(target);
+    explorer.createNewFile(target, HtmlUtils.setFocus);
   },
   Rename: (event: Event, explorer: Explorer) => {
     if (event.target instanceof HTMLInputElement) return;
     event.preventDefault();
     const target = getTarget(event);
-    explorer.startRename(target);
+    explorer.startRename(target, HtmlUtils.setFocus);
   },
   FocusNext: (event: Event, explorer: Explorer) => {
     if (event.target instanceof HTMLInputElement) return;
@@ -87,8 +93,8 @@ export const actions = {
 
     let nextIndex = (index + 1) % focusables.length; // Next Element to be focussed
     if (index === -1) nextIndex = 0; // Fail save
-
-    (focusables[nextIndex].querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();   
+    
+    HtmlUtils.setFocus(focusables[nextIndex] as HTMLElement);
   },
   FocusPrevious: (event: Event, explorer: Explorer) => {
     if (event.target instanceof HTMLInputElement) return;
@@ -110,6 +116,16 @@ export const actions = {
     else 
     if (index === -1) nextIndex = 0; // Fail save
 
-    (focusables[nextIndex].querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();   
-  }
+    HtmlUtils.setFocus(focusables[nextIndex] as HTMLElement);
+  },
+  Undo: (event: Event, explorer: Explorer, undo: () => boolean) => {
+    if (typeof undo !== 'function')  throw "undo must be a function";
+    event.preventDefault();
+    undo();
+  },
+  Redo: (event: Event, explorer: Explorer, redo: () => boolean) => {
+    if (typeof redo !== 'function')  throw "redo must be a function";
+    event.preventDefault();
+    redo();
+  } 
 }

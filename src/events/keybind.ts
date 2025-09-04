@@ -26,6 +26,7 @@ export const getKeyBindingMap = (config: KeymapConfig): KeyBindingMap => {
     
     const { action: name, params = [] } = action as ActionParam;
     if (!name || !actions.hasOwnProperty(name)) continue;
+    // @ts-ignore Para evitar la validacion del tipado en ...params
     map[keybinding] = (e, ex: Explorer) => actions[name](e, ex, ...params) 
   }
   

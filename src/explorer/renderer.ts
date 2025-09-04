@@ -317,7 +317,8 @@ export class Renderer {
     type: "file" | "directory", 
     parentNode: LoroTreeNode, 
     parentElement: HTMLElement | null, 
-    onConfirm: (name: string, type: "file" | "directory", parentNode: LoroTreeNode) => void
+    onConfirm: (name: string, type: "file" | "directory", parentNode: LoroTreeNode) => TreeID,
+    onCreated: (element: HTMLElement) => void = () => {}
   ): void {
     const tempId = `placeholder-${Date.now()}`;
     const wrapId = HtmlUtils.wrapID( parentElement ? parentNode.id : this.rootId, this.alias);
@@ -359,7 +360,7 @@ export class Renderer {
     
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") { e.preventDefault();
-        this.confirmPlaceholder(element, input.value, type, parentNode, onConfirm);
+        this.confirmPlaceholder(element, input.value, type, parentNode, onConfirm, onCreated);
       } 
       else 
       if (e.key === "Escape") { e.preventDefault();
@@ -369,7 +370,7 @@ export class Renderer {
     
     input.addEventListener("blur", () => {
       if (input.value) 
-        this.confirmPlaceholder(element, input.value, type, parentNode, onConfirm);
+        this.confirmPlaceholder(element, input.value, type, parentNode, onConfirm, onCreated);
       else this.cancelPlaceholder(element);
     });
     
@@ -423,7 +424,8 @@ export class Renderer {
     placeholderElement: HTMLElement, 
     name: string, type: "file" | "directory", 
     parentNode: LoroTreeNode, 
-    onConfirm: (name: string, type: "file" | "directory", parentNode: LoroTreeNode) => void
+    onConfirm: (name: string, type: "file" | "directory", parentNode: LoroTreeNode) => TreeID,
+    onSucces: (element: HTMLElement) => void = () => {}
   ): void {
     if (!name) {
       this.cancelPlaceholder(placeholderElement);
@@ -437,11 +439,13 @@ export class Renderer {
     }
     
     try {
-      onConfirm(name.trim(), type, parentNode);
-      this.cancelPlaceholder(placeholderElement); // Remove placeholder - the new element will be created by the tree update event
+      const id = onConfirm(name.trim(), type, parentNode);
+      const el = this.new(this.getNodeById(id), true);
+      placeholderElement.replaceWith(el);
+      onSucces(el);
     } 
     catch (error) {
-      console.error(`Failed to create ${type}:`, error);
+      console.warn(`Failed to create ${type}:`, error);
       this.setError(placeholderElement, (error as Error).message);
     }
   }

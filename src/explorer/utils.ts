@@ -22,6 +22,10 @@ export const HtmlUtils = {
     return match[1].replace("a", "@") as TreeID;
   },
   
+  setFocus: (element: HTMLElement) => {
+    (element.querySelector("."+HtmlUtils.PROPCLASS) as HTMLElement).focus();
+  },
+  
   depth(node: LoroTreeNode): number {
     let depth = 1;
     let parent = node.parent();

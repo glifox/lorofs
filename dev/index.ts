@@ -7,21 +7,31 @@ import { HtmlUtils } from "../src/explorer/utils";
 import { actions } from "../src/events/actions";
 import { UndoManager } from "loro-crdt";
 import { defaultMenuItems } from "../src/events/types/contextmenu";
+import { defaultKeymap } from "../src/events/types/keyboard";
+import { KeymapConfig } from "../src/events/keybind";
 
 const doc = LoroFS.new("Example", () => { }); 
 const el = document.getElementById("explorer")
 
 const undoManager = new UndoManager(doc.getMainDoc(), { mergeInterval: 1 });
 
+const contextmenu = {
+  menuItems: defaultMenuItems(
+    "divider",
+    { text: "undo", onclick: () => undoManager.undo() },
+    { text: "redo", onclick: () => undoManager.redo() }
+  )
+};
+
+const keybindings: KeymapConfig = {
+  ...defaultKeymap,
+  "ctrl-z": { action: "Undo", params: [() => undoManager.undo()] },
+  "ctrl-y": { action: "Redo", params: [() => undoManager.redo()] },
+}
+
 const explorer = new Explorer(doc, el!, { 
   iconProvider: IconProvider.new(catppuccinIcons as any, "Catppuccin Mocha"),
-  listeners: defaultListeners({ contextMenuOptions: { 
-    menuItems: defaultMenuItems(
-      "divider",
-       { text: "undo", onclick: undoManager.undo },  
-      { text: "redo", onclick: undoManager.redo }
-    )
-  }}),
+  listeners: defaultListeners({ contextMenuOptions: contextmenu, keybindings }),
   onOpenFile: (node) => { alert(`Opened file: ${node.data.get("name")}`) }
 })
 
