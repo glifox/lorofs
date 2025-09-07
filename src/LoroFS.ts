@@ -78,8 +78,6 @@ export class LoroFS {
       this.#tree = this.#mainDoc.getTree('fs-tree');
       const meta = this.#mainDoc.getMap('meta');
 
-      // MEJORA: Se cargan los IDs directamente desde los metadatos. Es mucho más robusto
-      // que buscar por un nombre hardcodeado como 'root' o 'trash'.
       const rootId = meta.get("rootNodeId") as TreeID | undefined;
       const trashId = meta.get("trashNodeId") as TreeID | undefined;
 
@@ -110,12 +108,11 @@ export class LoroFS {
 
       meta.set("name", name);
       meta.set("created", `${Date.now()}`);
-      // MEJORA: Se guardan los IDs de los nodos raíz y papelera para una carga fiable.
       meta.set("rootNodeId", this.#rootNodeId);
       meta.set("trashNodeId", this.#trashNodeId);
       
       this.#mainDoc.commit({ message: `:root:${name}` } );
-      this.save(); // Save initial state
+      this.save();
   }
   
   #assertNodeIsDirectory(nodeId: TreeID): LoroTreeNode {
@@ -138,7 +135,6 @@ export class LoroFS {
   createDirectory(name: string, parentId: TreeID = this.#rootNodeId): TreeID {
       const parentNode = this.#assertNodeIsDirectory(parentId);
 
-      // MEJORA: Evita crear directorios con nombres duplicados en el mismo nivel.
       const existing = parentNode.children()?.find(child => child.data.get('name') === name && child.data.get('type') === 'directory');
       if (existing) {
           throw new Error(`A directory with the name "${name}" already exists in parent "${parentId}".`);
@@ -162,7 +158,6 @@ export class LoroFS {
   createFile(name: string, fileType: string = 'text/plain', parentId: TreeID = this.#rootNodeId): FileCreationResult {
       const parentNode = this.#assertNodeIsDirectory(parentId);
 
-      // MEJORA: Evita crear archivos con nombres duplicados en el mismo nivel.
       const existing = parentNode.children()?.find(child => child.data.get('name') === name && child.data.get('type') === 'file');
       if (existing) {
           throw new Error(`A file with the name "${name}" already exists in parent "${parentId}".`);
@@ -184,7 +179,6 @@ export class LoroFS {
   }
 
   /**
-    * MEJORA: Renombrado de `deleteNode` a `moveToTrash` para ser más explícito.
     * Moves a file or directory to the trash.
     * @param nodeId - The ID of the node to move to trash.
     */
@@ -210,8 +204,6 @@ export class LoroFS {
   
   /**
     * Deletes a node and all its children permanently.
-    * MEJORA: Ahora devuelve los UUIDs de los archivos eliminados para que el
-    * sistema anfitrión pueda limpiar los LoroDocs de contenido asociados.
     * @param nodeId - The ID of the node to delete.
     * @returns An array of UUIDs of the deleted files.
     */
@@ -220,13 +212,19 @@ export class LoroFS {
           throw new Error("Cannot permanently delete the root or trash directory.");
       }
       
+      const nodeToDelete = this.#tree.getNodeByID(nodeId);
+      if (!nodeToDelete) {
+          throw new Error(`Node with ID "${nodeId}" not found.`);
+      }
+      
       const deletedFileUuids: string[] = [];
+      const nodeName = nodeToDelete.data.get('name') as string;
 
       const recursiveDelete = (id: TreeID) => {
           const node = this.#tree.getNodeByID(id);
           if (!node) return;
 
-          // Si es un archivo, guarda su UUID para devolverlo.
+          // If it's a file, save its UUID to return it.
           if (node.data.get('type') === 'file') {
               const uuid = node.data.get('uuid') as string | undefined;
               if (uuid) {
@@ -234,21 +232,21 @@ export class LoroFS {
               }
           }
           
-          // Borra recursivamente los hijos.
-          node.children()?.forEach(child => recursiveDelete(child.id));
+          // Recursively delete children.
+          const children = node.children() || [];
+          children.forEach(child => recursiveDelete(child.id));
           
-          // Borra el nodo actual.
+          // Delete the current node.
           this.#tree.delete(id);
       };
 
       recursiveDelete(nodeId);
       
-      // Informar al sistema host que debe eliminar los documentos de contenido.
+      // Inform the host system that it should delete the content documents.
       for (const uuid of deletedFileUuids) {
           this.#onSave(uuid, new LoroDoc(), { delete: true });
       }
       
-      const nodeName = this.#tree.getNodeByID(nodeId).data.get('name')
       this.#mainDoc.commit({ message: `* *- ${nodeName} permanently` });
       return deletedFileUuids;
     }
@@ -264,7 +262,7 @@ export class LoroFS {
 
       const newParentNode = this.#assertNodeIsDirectory(newParentId);
       
-      // Opcional: Comprobar si ya existe un nodo con el mismo nombre en el destino.
+      // Optional: Check if a node with the same name already exists in the destination.
       const nodeName = nodeToMove.data.get('name');
       const conflict = newParentNode.children()?.find(child => child.data.get('name') === nodeName);
       if (conflict) {
